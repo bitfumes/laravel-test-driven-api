@@ -9,9 +9,8 @@ use Tests\TestCase;
 class TodoListTest extends TestCase
 {
 
-    public function test_example()
+    public function test_store_todo_list()
     {
-        $this->withoutExceptionHandling();
         // preperation / prepare
 
         // action / perform
