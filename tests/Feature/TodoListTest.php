@@ -46,4 +46,13 @@ class TodoListTest extends TestCase
         $this->assertEquals($list->name,$response['name']);
         $this->assertDatabaseHas('todo_lists', ['name' => $list->name]);
     }
+
+    public function test_while_storing_todo_list_name_field_is_required()
+    {
+        $this->withExceptionHandling();
+
+        $this->postJson(route('todo-list.store'))
+                ->assertUnprocessable()
+                ->assertJsonValidationErrors(['name']);
+    }
 }
