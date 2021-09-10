@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Task;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,6 +18,7 @@ class CreateTasksTable extends Migration
             $table->id();
             $table->string('title');
             $table->unsignedBigInteger('todo_list_id');
+            $table->string('status')->default(Task::NOT_STARTED);
             $table->timestamps();
         });
     }

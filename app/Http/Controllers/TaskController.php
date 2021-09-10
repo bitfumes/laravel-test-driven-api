@@ -11,7 +11,7 @@ class TaskController extends Controller
 {
     public function index(TodoList $todo_list)
     {
-        $tasks = Task::where(['todo_list_id'=>$todo_list->id])->get();
+        $tasks = $todo_list->tasks;
         return response($tasks);
     }
 
