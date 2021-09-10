@@ -17,7 +17,9 @@ class CreateTasksTable extends Migration
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->unsignedBigInteger('todo_list_id');
+            $table->foreignId('todo_list_id')
+                    ->constrained()
+                    ->onDelete('cascade');
             $table->string('status')->default(Task::NOT_STARTED);
             $table->timestamps();
         });
