@@ -2,18 +2,17 @@
 
 namespace Database\Factories;
 
-use App\Models\Task;
-use App\Models\TodoList;
+use App\Models\Label;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class TaskFactory extends Factory
+class LabelFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Task::class;
+    protected $model = Label::class;
 
     /**
      * Define the model's default state.
@@ -23,11 +22,7 @@ class TaskFactory extends Factory
     public function definition()
     {
         return [
-            'title' => $this->faker->sentence,
-            'todo_list_id' => function(){
-                return TodoList::factory()->create()->id;
-            },
-            'description' => $this->faker->paragraph
+            //
         ];
     }
 }
