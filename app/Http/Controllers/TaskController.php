@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\TaskRequest;
 use App\Models\Task;
 use App\Models\TodoList;
 use Illuminate\Http\Request;
@@ -15,9 +16,9 @@ class TaskController extends Controller
         return response($tasks);
     }
 
-    public function store(Request $request,TodoList $todo_list)
+    public function store(TaskRequest $request,TodoList $todo_list)
     {
-        return $todo_list->tasks()->create($request->all());
+        return $todo_list->tasks()->create($request->validated());
     }
 
     public function destroy(Task $task)

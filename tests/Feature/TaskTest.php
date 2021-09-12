@@ -35,13 +35,35 @@ class TaskTest extends TestCase
     {
         $list = $this->createTodoList();
         $task = Task::factory()->make();
+        $label = $this->createLabel();
 
-        $this->postJson(route('todo-list.task.store',$list->id),['title' => $task->title])
+        $this->postJson(route('todo-list.task.store',$list->id),[
+            'title' => $task->title,
+            'label_id' => $label->id
+            ])
             ->assertCreated();
 
         $this->assertDatabaseHas('tasks',[
             'title' => $task->title,
-            'todo_list_id' =>$list->id
+            'todo_list_id' =>$list->id,
+            'label_id' => $label->id
+        ]);
+    }
+
+    public function test_store_a_task_for_a_todo_list_without_a_label()
+    {
+        $list = $this->createTodoList();
+        $task = Task::factory()->make();
+
+        $this->postJson(route('todo-list.task.store',$list->id),[
+            'title' => $task->title
+            ])
+            ->assertCreated();
+
+        $this->assertDatabaseHas('tasks',[
+            'title' => $task->title,
+            'todo_list_id' =>$list->id,
+            'label_id' => null
         ]);
     }
 
