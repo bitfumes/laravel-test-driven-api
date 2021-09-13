@@ -13,32 +13,17 @@ class WebServiceController extends Controller
         'https://www.googleapis.com/auth/drive.file',
     ];
 
-    public function connect($name)
+    public function connect($name, Client $client)
     {
         if ($name === 'google-drive') {
-            $client = new Client();
-
-            $config = config('services.google');
-            $client->setClientId($config['id']);
-            $client->setClientSecret($config['secret']);
-            $client->setRedirectUri($config['redirect_url']);
-
             $client->setScopes(self::DRIVE_SCOPES);
-
             $url = $client->createAuthUrl();
             return response(['url' => $url]);
         }
     }
 
-    public function callback(Request $request)
+    public function callback(Request $request, Client $client)
     {
-        $client = app(Client::class);
-
-        $config = config('services.google');
-        $client->setClientId($config['id']);
-        $client->setClientSecret($config['secret']);
-        $client->setRedirectUri($config['redirect_url']);
-
         $access_token = $client->fetchAccessTokenWithAuthCode($request->code);
 
         $service = WebService::create([
