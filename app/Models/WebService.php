@@ -9,5 +9,9 @@ class WebService extends Model
 {
     use HasFactory;
 
+    protected $casts = [
+        'token' => 'json'
+    ];
+
     protected $guarded = [];
 }

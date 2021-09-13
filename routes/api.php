@@ -20,6 +20,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/web-service/connect/{name}', [WebServiceController::class, 'connect'])->name('web-service.connect');
     Route::post('/web-service/callback', [WebServiceController::class, 'callback'])->name('web-service.callback');
+    Route::post('/web-service/{web_service}', [WebServiceController::class, 'store'])->name('web-service.store');
 });
 
 Route::post('/register', RegisterController::class)

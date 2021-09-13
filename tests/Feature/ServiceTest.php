@@ -41,15 +41,26 @@ class ServiceTest extends TestCase
                 ->andReturn('fake-token');
         });
 
-        $this->postJson(route('web-service.callback'), [
+        $res = $this->postJson(route('web-service.callback'), [
             'code' => 'dummyCode'
         ])->assertCreated();
 
         $this->assertDatabaseHas('web_services', [
             'user_id' => $this->user->id,
-            'token' => '{"access_token":"fake-token"}'
+            'token' => '"{\"access_token\":\"fake-token\"}"'
         ]);
+    }
 
-        // $this->assertNotNull($this->user->services->first()->token);
+    public function test_data_of_a_week_can_be_stored_on_google_drive()
+    {
+        $this->mock(Client::class, function (MockInterface $mock) {
+            $mock->shouldReceive('setAccessToken');
+            $mock->shouldReceive('getLogger->info');
+            $mock->shouldReceive('shouldDefer');
+            $mock->shouldReceive('execute');
+        });
+
+        $web_service = $this->createWebService();
+        $this->postJson(route('web-service.store', $web_service->id))->assertCreated();
     }
 }
