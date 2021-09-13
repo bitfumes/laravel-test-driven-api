@@ -3,6 +3,11 @@
 use Google\Client;
 use Illuminate\Support\Facades\Route;
 
+/**
+ *
+ * Refer to this url for all details
+ * https://github.com/googleapis/google-api-php-client/blob/master/examples/simple-file-upload.php
+ */
 
 Route::get('/', function () {
     return view('welcome');
@@ -18,7 +23,7 @@ Route::get('/drive', function () {
         'https://www.googleapis.com/auth/drive.file',
     ]);
     $url = $client->createAuthUrl();
-    return redirect($url);
+    return $url;
 });
 
 Route::get('/google-drive/callback', function () {
