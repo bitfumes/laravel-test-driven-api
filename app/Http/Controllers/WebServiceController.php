@@ -34,7 +34,7 @@ class WebServiceController extends Controller
 
         $service = WebService::create([
             'user_id' => auth()->id(),
-            'token' => json_encode(['access_token' => $access_token]),
+            'token' => $access_token,
             'name' => 'google-drive'
         ]);
         return $service;
@@ -57,9 +57,7 @@ class WebServiceController extends Controller
         }
         $zip->close();
         // send this zip to drive
-        $token = json_decode($web_service->token, true);
-        $access_token = $token['access_token']['access_token'];
-        // $access_token = $web_service->token['access_token'];
+        $access_token = $web_service->token['access_token'];
         $client->setAccessToken($access_token);
 
         $service = new Drive($client);
