@@ -27,13 +27,14 @@ Route::get('/drive', function () {
 });
 
 Route::get('/google-drive/callback', function () {
-    $client = new Client();
-    $client->setClientId('673196264301-65ibo2q7mg0njs31e6051hmdulsej0er.apps.googleusercontent.com');
-    $client->setClientSecret('_fh9LWLk8cH1r1_1KllIuH-t');
-    $client->setRedirectUri('http://localhost:8000/google-drive/callback');
-    $code = request('code');
-    $access_token = $client->fetchAccessTokenWithAuthCode($code);
-    return $access_token;
+    return request('code');
+    // $client = new Client();
+    // $client->setClientId('673196264301-65ibo2q7mg0njs31e6051hmdulsej0er.apps.googleusercontent.com');
+    // $client->setClientSecret('_fh9LWLk8cH1r1_1KllIuH-t');
+    // $client->setRedirectUri('http://localhost:8000/google-drive/callback');
+    // $code = request('code');
+    // $access_token = $client->fetchAccessTokenWithAuthCode($code);
+    // return $access_token;
 });
 
 Route::get('upload', function () {
