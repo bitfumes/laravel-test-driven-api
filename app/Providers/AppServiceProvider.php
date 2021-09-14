@@ -15,7 +15,7 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton(Client::class, function () {
-            $client = app(Client::class);
+            $client = new Client();
 
             $config = config('services.google');
             $client->setClientId($config['id']);
