@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Resources\TaskResource;
 use App\Models\Task;
 use App\Models\WebService;
+use App\Services\GoogleDrive;
+use App\Services\Zipper;
 use Google\Client;
 use Google\Service\Drive;
 use Google\Service\Drive\DriveFile;
@@ -41,39 +43,18 @@ class WebServiceController extends Controller
         return $service;
     }
 
-    public function store(Request $request, WebService $web_service, Client $client)
+    public function store(WebService $web_service, GoogleDrive $drive)
     {
-        // we need to fetch last 7 days of tasks
         $tasks = Task::where('created_at', '>=', now()->subDays(7))->get();
-        // create a json file with this data
         $jsonFileName = 'task_dump.json';
         Storage::put("/public/temp/$jsonFileName", TaskResource::collection($tasks)->toJson());
-        // create a zip file with this json file
-        $zip = new ZipArchive();
-        $zipFileName = storage_path('app/public/temp/' . now()->timestamp . '-task.zip');
 
-        if ($zip->open($zipFileName, ZipArchive::CREATE) === true) {
-            $filePath = storage_path('app/public/temp/' . $jsonFileName);
-            $zip->addFile($filePath, $jsonFileName);
-        }
-        $zip->close();
-        // send this zip to drive
+        $zipFileName = Zipper::createZipOf($jsonFileName);
+
         $access_token = $web_service->token['access_token'];
-        $client->setAccessToken($access_token);
+        $drive->uploadFile($zipFileName, $access_token);
 
-        $service = new Drive($client);
-        $file = new DriveFile();
-
-        $file->setName("HelloWorld.zip");
-        $service->files->create(
-            $file,
-            array(
-                'data' => file_get_contents($zipFileName),
-                'mimeType' => 'application/octet-stream',
-                'uploadType' => 'multipart'
-            )
-        );
-
+        Storage::deleteDirectory('public/temp');
         return response('Uploaded', Response::HTTP_CREATED);
     }
 }
