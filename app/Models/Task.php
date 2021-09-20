@@ -14,10 +14,15 @@ class Task extends Model
     public const PENDING = 'pending';
     public const NOT_STARTED = 'not_started';
 
-    protected $fillable = ['title','todo_list_id','status','description','label_id'];
+    protected $fillable = ['title', 'todo_list_id', 'status', 'description', 'label_id'];
 
     public function todo_list(): BelongsTo
     {
         return $this->belongsTo(TodoList::class);
+    }
+
+    public function label()
+    {
+        return $this->belongsTo(Label::class);
     }
 }

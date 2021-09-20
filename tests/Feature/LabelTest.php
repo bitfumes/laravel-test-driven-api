@@ -11,7 +11,7 @@ class LabelTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function setUp():void
+    public function setUp(): void
     {
         parent::setUp();
         $this->user = $this->authUser();
@@ -22,10 +22,10 @@ class LabelTest extends TestCase
         $label = Label::factory()->raw();
 
         $this->postJson(route('label.store'), $label)
-        ->assertCreated();
+            ->assertCreated();
 
-        $this->assertDatabaseHas('labels',[
-            'title' => $label['title'],'color' => $label['color']
+        $this->assertDatabaseHas('labels', [
+            'title' => $label['title'], 'color' => $label['color']
         ]);
     }
 
@@ -33,22 +33,22 @@ class LabelTest extends TestCase
     {
         $label = $this->createLabel();
 
-        $this->deleteJson(route('label.destroy',$label->id))->assertNoContent();
+        $this->deleteJson(route('label.destroy', $label->id))->assertNoContent();
 
-        $this->assertDatabaseMissing('labels',['title' => $label->title]);
+        $this->assertDatabaseMissing('labels', ['title' => $label->title]);
     }
 
     public function test_user_can_update_label()
     {
         $label = $this->createLabel();
 
-        $this->patchJson(route('label.update',$label->id),[
-            'color'=>'new-color',
+        $this->patchJson(route('label.update', $label->id), [
+            'color' => 'new-color',
             'title' => $label->title
         ])
-        ->assertOk();
+            ->assertOk();
 
-        $this->assertDatabaseHas('labels',['color' => 'new-color']);
+        $this->assertDatabaseHas('labels', ['color' => 'new-color']);
     }
 
     public function test_fetch_all_label_for_a_user()
@@ -56,7 +56,7 @@ class LabelTest extends TestCase
         $label = $this->createLabel(['user_id' => $this->user->id]);
         $this->createLabel();
 
-        $response = $this->getJson(route('label.index'))->assertOk()->json();
+        $response = $this->getJson(route('label.index'))->assertOk()->json('data');
 
         $this->assertEquals($response[0]['title'], $label->title);
     }
